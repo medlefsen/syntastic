@@ -18,7 +18,12 @@ if !exists("g:syntastic_ruby_exec")
 endif
 
 function! SyntaxCheckers_ruby_mri_IsAvailable()
-    return executable(expand(g:syntastic_ruby_exec))
+    if executable(expand(g:syntastic_ruby_exec))
+      let cmd = "ruby -e " . shellescape('print defined?(RUBY_ENGINE) ? RUBY_ENGINE : "ruby"')
+      let ver = system(cmd)
+      return (ver == "ruby")
+    end
+    return 0
 endfunction
 
 function! SyntaxCheckers_ruby_mri_GetLocList()
